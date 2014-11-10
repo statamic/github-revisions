@@ -1,0 +1,11 @@
+# GitHub API Key
+api_key:
+
+# Repo user. ie. the "statamic" in https://github.com/statamic/github_revisions
+repo_user:
+
+# Repo name. ie. the "github_revisions" in https://github.com/statamic/github_revisions
+repo_name:
+
+# Content root location in your repo, not in Statamic.
+# content_root: _content
