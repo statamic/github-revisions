@@ -327,9 +327,7 @@ class Core_github_revisions extends Core
 			return $this->cache->getYAML($cache_file);
 		}
 
-		$client = $this->createClient();
-
-		$commit = $client->api('repo')->commits()->show(
+		$commit = $this->client->api('repo')->commits()->show(
 			$this->config['repo_user'],
 			$this->config['repo_name'],
 			$sha
