@@ -260,7 +260,7 @@ class Core_github_revisions extends Core
 				'message'    => $commit['commit']['message'],
 				'timestamp'  => $date,
 				'author'     => $commit['author']['login'],
-				'is_current' => $this->isCurrentRevision($file, $commit['sha'])
+				'is_current' => Request::get('revision') == $commit['sha']
 			);
 		}
 
@@ -269,18 +269,17 @@ class Core_github_revisions extends Core
 
 
 	/**
-	 * Is a file the current revision?
+	 * Checks that a given $revision exists and is the latest revisions for a given $file
 	 *
-	 * @param $file
-	 * @param $revision
+	 * @param string $file     File to check through
+	 * @param string $revision Revision to consider as latest
 	 * @return bool
 	 */
-	public function isCurrentRevision($file, $revision)
+	public function isLatestRevision($file, $revision)
 	{
-		$file_content = File::get(Path::assemble(BASE_PATH, Config::getContentRoot(), $file));
-		$blob_content = $this->getBlob($file, $revision)->content;
+		$revisions = $this->getRevisions($file);
 
-		return $file_content == $blob_content;
+		return $revisions[0]['revision'] == $revision;
 	}
 
 

@@ -42,7 +42,7 @@ class API_github_revisions extends API implements Interface_revisions
 	 */
 	public function isLatestRevision($file, $revision)
 	{
-		return $this->core->isCurrentRevision($file, $revision);
+		return $this->core->isLatestRevision($file, $revision);
 	}
 
 
