@@ -175,7 +175,7 @@ class Core_github_revisions extends Core
 		// Return the cache if it exists
 		$cache_file = 'blobs/' . Helper::makeHash($path.$sha);
 		if ($this->cache->exists($cache_file)) {
-			return $this->cache->getYAML($cache_file);
+			return (object) $this->cache->getYAML($cache_file);
 		}
 
 		// Get the requested tree
@@ -216,7 +216,7 @@ class Core_github_revisions extends Core
 		$this->cache->putYAML($cache_file, $blob);
 
 		// Return it
-		return $blob;
+		return (object) $blob;
 	}
 
 
@@ -274,8 +274,7 @@ class Core_github_revisions extends Core
 	public function isCurrentRevision($file, $revision)
 	{
 		$file_content = File::get(Path::assemble(BASE_PATH, Config::getContentRoot(), $file));
-		$blob = $this->getBlob($file, $revision);
-		$blob_content = $blob['content'];
+		$blob_content = $this->getBlob($file, $revision)->content;
 
 		return $file_content == $blob_content;
 	}
@@ -290,9 +289,7 @@ class Core_github_revisions extends Core
 	 */
 	public function getRevision($file, $revision)
 	{
-		$blob = $this->getBlob($file, $revision);
-
-		return $blob['content'];
+		return $this->getBlob($file, $revision)->content;
 	}
 
 
