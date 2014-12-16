@@ -127,9 +127,7 @@ class Core_github_revisions extends Core
 	 */
 	private function getLatestTreeSha()
 	{
-		$client = $this->createClient();
-
-		$commits = $client->api('repo')->commits()->all(
+		$commits = $this->client->api('repo')->commits()->all(
 			$this->config['repo_user'],
 			$this->config['repo_name'],
 			array('sha' => 'master', 'per_page' => 1)
