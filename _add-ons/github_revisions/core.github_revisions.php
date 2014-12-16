@@ -351,21 +351,12 @@ class Core_github_revisions extends Core
 	{
 		$path = $this->standardize($file);
 
-		// Return the cache if it exists
-		$cache_file = 'commits/' . Helper::makeHash($path);
-		if ($this->cache->exists($cache_file)) {
-			return $this->cache->getYAML($cache_file);
-		}
-
 		// Get commits from api
 		$commits = $this->client->api('repo')->commits()->all(
 			$this->config['repo_user'],
 			$this->config['repo_name'],
 			array('path' => $path)
 		);
-
-		// Save to cache
-		$this->cache->putYAML($cache_file, $commits);
 
 		return $commits;
 	}
