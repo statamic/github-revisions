@@ -145,10 +145,10 @@ class Core_github_revisions extends Core
 	 */
 	private function getTree($sha)
 	{
-		// Return the cache if it exists
-		$cache_file = 'tree/' . Helper::makeHash($sha);
-		if ($this->cache->exists($cache_file)) {
-			return $this->cache->getYAML($cache_file);
+		// Return the blink cache if it exists
+		$blink_key = 'tree/' . Helper::makeHash($sha);
+		if ($this->blink->exists($blink_key)) {
+			return $this->blink->get($blink_key);
 		}
 
 		$tree = $this->client->api('git')->trees()->show(
@@ -158,8 +158,8 @@ class Core_github_revisions extends Core
 			true // recursive
 		);
 
-		// Save it to cache
-		$this->cache->putYAML($cache_file, $tree);
+		// Save it to blink cache
+		$this->blink->set($blink_key, $tree);
 
 		return $tree;
 	}
@@ -176,10 +176,10 @@ class Core_github_revisions extends Core
 	{
 		$path = $this->standardize($file);
 
-		// Return the cache if it exists
-		$cache_file = 'blobs/' . Helper::makeHash($path.$sha);
-		if ($this->cache->exists($cache_file)) {
-			return (object) $this->cache->getYAML($cache_file);
+		// Return the blink cache if it exists
+		$blink_key = 'blobs/' . Helper::makeHash($path.$sha);
+		if ($this->blink->exists($blink_key)) {
+			return (object) $this->blink->get($blink_key);
 		}
 
 		// Get the requested tree
@@ -216,8 +216,8 @@ class Core_github_revisions extends Core
 			'content'   => $content
 		);
 
-		// Save it to cache
-		$this->cache->putYAML($cache_file, $blob);
+		// Save it to blink cache
+		$this->blink->set($blink_key, $blob);
 
 		// Return it
 		return (object) $blob;
@@ -322,10 +322,10 @@ class Core_github_revisions extends Core
 	 */
 	private function getCommit($sha)
 	{
-		// Return the cache if it exists
-		$cache_file = 'commit/' . Helper::makeHash($sha);
-		if ($this->cache->exists($cache_file)) {
-			return $this->cache->getYAML($cache_file);
+		// Return the blink cache if it exists
+		$blink_key = 'commit/' . Helper::makeHash($sha);
+		if ($this->blink->exists($blink_key)) {
+			return $this->blink->get($blink_key);
 		}
 
 		$commit = $this->client->api('repo')->commits()->show(
@@ -334,8 +334,8 @@ class Core_github_revisions extends Core
 			$sha
 		);
 
-		// Save it to cache
-		$this->cache->putYAML($cache_file, $commit);
+		// Save it to blink cache
+		$this->blink->set($blink_key, $commit);
 
 		return $commit;
 	}
