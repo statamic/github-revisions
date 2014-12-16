@@ -34,7 +34,13 @@ class Core_github_revisions extends Core
 	{
 		$content_root = array_get($this->config, 'content_root');
 
-		return Path::trimSlashes(Path::assemble($content_root, $path));
+		$path = Path::trimSlashes(Path::assemble($content_root, $path));
+
+		// If an already standardized path is passed in, the content root will double up.
+		// Address that.
+		$path = str_replace($content_root . '/' . $content_root, $content_root, $path);
+
+		return $path;
 	}
 
 
