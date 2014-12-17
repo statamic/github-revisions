@@ -115,7 +115,7 @@ class API_github_revisions extends API implements Interface_revisions
 	 */
 	public function moveFile($old_file, $new_file)
 	{
-		// @todo
+		$this->blink->set('move', compact('old_file', 'new_file'));
 	}
 
 

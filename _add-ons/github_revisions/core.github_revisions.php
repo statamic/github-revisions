@@ -71,7 +71,11 @@ class Core_github_revisions extends Core
 	{
 		$path = $this->standardize($file);
 
-		if ($is_new) {
+		if ($files = $this->blink->get('move')) {
+			$this->deleteFile($this->standardize($files['old_file']));
+		}
+
+		if ($is_new || $files) {
 			$this->commitNewFile($path, $file_content, $message);
 		} else {
 			$this->commitExistingFile($path, $file_content, $message);
@@ -136,11 +140,14 @@ class Core_github_revisions extends Core
 
 		$existing_file = $this->getBlob($file, $this->getLatestTreeSha());
 
+		$message = Config::get('_revisions_message_prefix') . ' ';
+		$message .= ($this->blink->exists('move')) ? __('file_renamed') : __('file_deleted');
+
 		$this->client->api('repo')->contents()->rm(
 			$this->config['repo_user'],
 			$this->config['repo_name'],
 			$path,
-			__('file_deleted'),
+			$message,
 			$existing_file->sha
 		);
 	}
