@@ -1,4 +1,8 @@
 api_key:
 repo_user:
 repo_name:
+
 content_root: _content
+
+committer_name: first_name last_name
+committer_email: email

@@ -93,7 +93,9 @@ class Core_github_revisions extends Core
 			$this->config['repo_name'],
 			$path,
 			$file_content,
-			$message
+			$message,
+			null,
+			$this->getCommitter()
 		);
 	}
 
@@ -115,7 +117,9 @@ class Core_github_revisions extends Core
 			$path,
 			$file_content,
 			$message,
-			$this->getBlob($path, $tree_sha)->sha
+			$this->getBlob($path, $tree_sha)->sha,
+			null,
+			$this->getCommitter()
 		);
 	}
 
@@ -279,11 +283,14 @@ class Core_github_revisions extends Core
 			$date = new Carbon($commit['commit']['author']['date']);
 			$date = $date->timestamp;
 
+			$message = $commit['commit']['message'];
+			$author = $commit['commit']['committer']['name'];
+
 			$revisions[] = array(
 				'revision'   => $commit['sha'],
-				'message'    => $commit['commit']['message'],
+				'message'    => $message,
 				'timestamp'  => $date,
-				'author'     => $commit['author']['login'],
+				'author'     => $author,
 				'is_current' => Request::get('revision', $latest_commit_sha) == $commit['sha']
 			);
 		}
@@ -384,5 +391,29 @@ class Core_github_revisions extends Core
 		return $commits;
 	}
 
+
+	/**
+	 * Generate committer details
+	 * 
+	 * @return array  An array containing name, email and the current date/time
+	 */
+	private function getCommitter()
+	{
+		// Grab the member
+		$member = Auth::getCurrentMember();
+
+		$email = $member->get($this->config['committer_email']);
+		$date = Carbon::now()->toIso8601String();
+
+		// Build the name from the member fields specified in the config
+		$name = implode(' ', array_map(function($field) use ($member) {
+			return $member->get($field);
+		}, explode(' ', $this->config['committer_name'])));
+
+		// Fall back to username if there is no generated name
+		$name = ($name == ' ') ? $member->get('username') : $name;
+
+		return compact('name', 'email', 'date');
+	}
 
 }
