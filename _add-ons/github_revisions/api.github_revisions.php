@@ -83,14 +83,7 @@ class API_github_revisions extends API implements Interface_revisions
 	 */
 	public function saveFirstRevision($file)
 	{
-		return; // for now, do nothing. @todo
-
-		// get file contents
-		$full_path        = Path::assemble(BASE_PATH, Config::getContentRoot(), $file);
-		$existing_content = File::get($full_path);
-
-		// save revision
-		$this->saveRevision($file, $existing_content, __('first_save'), File::getLastModified($full_path));
+		$this->core->saveFirstRevision($file);
 	}
 
 

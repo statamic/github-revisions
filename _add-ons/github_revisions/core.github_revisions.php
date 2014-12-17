@@ -129,6 +129,23 @@ class Core_github_revisions extends Core
 
 
 	/**
+	 * Attempts to save the first revision for a given $file
+	 *
+	 * @param string $file File that is attempting to save
+	 * @return void
+	 */
+	public function saveFirstRevision($file)
+	{
+		$path    = Path::assemble(BASE_PATH, Config::getContentRoot(), $file);
+		$content = File::get($path);
+
+		$message = Config::get('_revisions_message_prefix') . ' ' . __('first_save');
+
+		$this->saveRevision($file, $content, $message, true);
+	}
+
+
+	/**
 	 * Deletes a file from the repo
 	 * 
 	 * @param $file  File to be deleted
