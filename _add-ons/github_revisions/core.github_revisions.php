@@ -250,6 +250,8 @@ class Core_github_revisions extends Core
 
 		$commits = $this->getCommits($file);
 
+		$latest_commit_sha = $commits[0]['sha'];
+
 		// change commits into a format we can use
 		foreach ($commits as $commit) {
 			$date = new Carbon($commit['commit']['author']['date']);
@@ -260,7 +262,7 @@ class Core_github_revisions extends Core
 				'message'    => $commit['commit']['message'],
 				'timestamp'  => $date,
 				'author'     => $commit['author']['login'],
-				'is_current' => Request::get('revision') == $commit['sha']
+				'is_current' => Request::get('revision', $latest_commit_sha) == $commit['sha']
 			);
 		}
 
