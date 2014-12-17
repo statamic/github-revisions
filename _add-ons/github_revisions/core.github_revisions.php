@@ -307,6 +307,25 @@ class Core_github_revisions extends Core
 
 
 	/**
+	 * Checks that a given $revision exists for a given $file in the system
+	 *
+	 * @param string $file     File to check for
+	 * @param string $revision Revision key to check
+	 * @return bool
+	 */
+	public function isRevision($file, $revision)
+	{
+		$path = $this->standardize($file);
+		
+		foreach ($this->getCommits($path) as $commit) {
+			if ($commit['sha'] == $revision) return true;
+		}
+
+		return false;
+	}
+
+
+	/**
 	 * Checks that a given $revision exists and is the latest revisions for a given $file
 	 *
 	 * @param string $file     File to check through

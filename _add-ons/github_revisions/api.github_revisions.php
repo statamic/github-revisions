@@ -29,7 +29,7 @@ class API_github_revisions extends API implements Interface_revisions
 	 */
 	public function isRevision($file, $revision)
 	{
-		return true; // @todo
+		return $this->core->isRevision($file, $revision);
 	}
 
 
