@@ -95,14 +95,14 @@ class API_github_revisions extends API implements Interface_revisions
 
 
 	/**
-	 * Deletes all revision history for a given $file
+	 * Deletes a $file
 	 *
-	 * @param string $file File to delete revisions for
+	 * @param string $file File to delete
 	 * @return void
 	 */
 	public function deleteRevisions($file)
 	{
-		// @todo
+		$this->core->deleteFile($file);
 	}
 
 

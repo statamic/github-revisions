@@ -121,6 +121,28 @@ class Core_github_revisions extends Core
 
 
 	/**
+	 * Deletes a file from the repo
+	 * 
+	 * @param $file  File to be deleted
+	 * @return void
+	 */
+	public function deleteFile($file)
+	{
+		$path = $this->standardize($file);
+
+		$existing_file = $this->getBlob($file, $this->getLatestTreeSha());
+
+		$this->client->api('repo')->contents()->rm(
+			$this->config['repo_user'],
+			$this->config['repo_name'],
+			$path,
+			__('file_deleted'),
+			$existing_file->sha
+		);
+	}
+
+
+	/**
 	 * Get the latest tree SHA from the API
 	 *
 	 * @return string SHA hash
